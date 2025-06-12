@@ -1,0 +1,24 @@
+#!/bin/bash
+if test $# -lt 1
+then
+        echo "Usage: apex-test interface\n" >&2
+        exit 1
+fi
+if test $(id -u) -ne 0
+then
+	echo "You probably need to be root to run this successfully" >&2
+fi
+dev="$1"
+# If the interface to be used with APEX has been controlled by Network
+# Manager, or a similar system, then it may not be fully enabled for IPv6
+# leaving it without a link-local address. To fix this we disable
+# and enable the interface address generator and it will then work.
+# Ideally, you should ensure that nothing is attempting to manage the
+# APEX interface
+echo 0 >/proc/sys/net/ipv6/conf/"$dev"/addr_gen_mode
+echo 1 >/proc/sys/net/ipv6/conf/"$dev"/addr_gen_mode
+	# if we don't sleep, the test program will end up having to
+	# re-transmit its requests, which is harmless except it will
+	# spoil the attempt to measure the speed
+sleep 2
+BUILT/qdapextest "$dev" >r.out

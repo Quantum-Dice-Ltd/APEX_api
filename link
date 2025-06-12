@@ -1,0 +1,11 @@
+#!/bin/sh
+out="$1"
+shift
+gcc \
+	-Wall \
+	-Wextra \
+	-g \
+	-pthread \
+	-O3 \
+	-o "$out" "$@" \
+	-lpcap -lssl -lcrypto -lpng 2>&1 | t0 "$out".err

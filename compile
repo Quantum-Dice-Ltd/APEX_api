@@ -1,0 +1,13 @@
+#!/bin/sh
+out="$1"
+shift
+gcc -c \
+	-DQD_RECV_SENDTO_DUPLEX \
+	-Wall \
+	-Wextra \
+	-Wswitch-enum \
+	-g \
+	-pthread \
+	-O3 \
+	-MMD \
+	-o "$out" "$@" 2>&1 | t0 "$out".err
