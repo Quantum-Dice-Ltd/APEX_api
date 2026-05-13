@@ -1,4 +1,14 @@
 #!/bin/sh
+
+t0 () {
+	out="$1"
+	tee "$out"
+	if ! test -s "$out"
+	then
+		rm "$out"
+	fi
+}
+
 out="$1"
 shift
 gcc \
